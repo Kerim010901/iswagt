@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict');
+const {netMinutes,validate}=require('./dist/core.js');
+assert.equal(netMinutes('08:00','17:00'),480);
+assert.equal(netMinutes('12:15','12:45'),0);
+assert.equal(netMinutes('11:30','12:30'),30);
+assert.equal(netMinutes('12:30','13:30'),30);
+assert.equal(netMinutes('08:00','11:00'),180);
+assert.equal(netMinutes('17:00','08:00'),null);
+assert.equal(netMinutes('25:00','08:00'),null);
+const rec={type:'present',entry:'08:00',exit:'17:00'};
+assert.equal(validate(rec,'2026-09-24','2026-10-06',930),'');
+assert.notEqual(validate(rec,'2026-10-06','2026-10-06',930),'');
+assert.notEqual(validate(rec,'2026-10-07','2026-10-06',930),'');
+assert.notEqual(validate({...rec,exit:'07:00'},'2026-09-24','2026-10-06',930),'');
+assert.equal(validate({type:'leave'},'2026-10-06','2026-10-06',930),'');
+console.log('12 attendance calculation and validation checks passed.');
